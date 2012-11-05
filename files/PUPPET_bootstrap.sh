@@ -25,7 +25,9 @@ puppet_bootstrap(){
   if [ $PUPPET_install == 'true'  ]
   then
     FACTER_pe_install="true"
-    /opt/puppet/bin/puppet agent -t --environment=pe_agent --server="${PUPPET_master}" --ssldir="/etc/puppetlabs/puppet/ssl"
+    /opt/puppet/bin/puppet agent -t --environment=pe_agent \
+      --server="${PUPPET_master}" \
+      --ssldir="/etc/puppetlabs/puppet/ssl"
   elif [ $PUPPET_upgrade == 'true' ]
     FACTER_pe_upgrade="true"
     /opt/puppet/bin/puppet agent -t --environment=pe_agent
@@ -60,7 +62,10 @@ done
 
 if [ $PUPPET_bootstrap == "false" ]
 then
-  /opt/puppet/bin/PUPPET_bootstrap.sh --install=$PUPPET_install --upgrade=$PUPPET_upgrade --master=$PUPPET_master --bootstrap="true" &
+  /opt/puppet/bin/PUPPET_bootstrap.sh --install=$PUPPET_install \
+    --upgrade=$PUPPET_upgrade \
+    --master=$PUPPET_master \
+    --bootstrap="true" &
 else
   puppet_bootstrap
 fi
