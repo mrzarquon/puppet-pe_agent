@@ -1,7 +1,8 @@
 #!/bin/bash
 
 
-PUPPET_var_path=`/opt/puppet/bin/puppet config print vardir`
+#PUPPET_var_path=`/opt/puppet/bin/puppet config print vardir`
+PUPPET_var_path="/"
 PUPPET_lock_file="${PUPPET_var_path}/state/puppetdlock"
 PUPPET_bootstrap="false"
 PUPPET_install="false"
@@ -13,8 +14,12 @@ PUPPET_master="puppet"
 puppet_bootstrap(){
   loop_timeout=320
   loop_time=0
-  while [ -f $puppet_lock_files ]
+
+  echo "checking for lock file"
+
+  while [ -f $PUPPET_lock_file ]
   do
+    echo "lock file found, waiting"
     sleep 15
     loop_time=$loop_time + 15
     if [ $loop_time == $loop_timeout ]
@@ -22,15 +27,19 @@ puppet_bootstrap(){
       exit "150 - timeouut exceeded"
     fi
   done
-  if [ $PUPPET_install == 'true'  ]
+
+  echo "Now running puppet"
+
+  if [ $PUPPET_install=='true' ]
   then
     FACTER_pe_install="true"
-    /opt/puppet/bin/puppet agent -t --environment=pe_agent \
+    echo /opt/puppet/bin/puppet agent -t --environment=pe_agent \
       --server="${PUPPET_master}" \
       --ssldir="/etc/puppetlabs/puppet/ssl"
-  elif [ $PUPPET_upgrade == 'true' ]
+  elif [ $PUPPET_upgrade=='true' ]
+  then
     FACTER_pe_upgrade="true"
-    /opt/puppet/bin/puppet agent -t --environment=pe_agent
+    echo /opt/puppet/bin/puppet agent -t --environment=pe_agent
   fi
 
 }
@@ -60,12 +69,12 @@ do
   esac
 done
 
-if [ $PUPPET_bootstrap == "false" ]
+if [ $PUPPET_bootstrap=='false' ]
 then
-  /opt/puppet/bin/PUPPET_bootstrap.sh --install=$PUPPET_install \
+  echo /opt/puppet/bin/PUPPET_bootstrap.sh --install=$PUPPET_install \
     --upgrade=$PUPPET_upgrade \
     --master=$PUPPET_master \
-    --bootstrap="true" &
+    --bootstrap=true &
 else
   puppet_bootstrap
 fi
