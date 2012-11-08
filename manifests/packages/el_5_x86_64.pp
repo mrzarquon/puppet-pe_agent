@@ -1,4 +1,7 @@
 class pe_agent::packages::el_5_86_x64 {
+
+  Package { require => Class['pe_agent::yum'] }
+  
   package { 'pe-ruby-libs': ensure => '1.8.7.370-1.pe.el5' }
   package { 'pe-ruby-rdoc': ensure => '1.8.7.370-1.pe.el5' }
   package { 'pe-ruby-shadow': ensure => '1.4.1-8.pe.el5' }

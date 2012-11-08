@@ -45,26 +45,26 @@ fact_is_puppetconsole=false",
     mode    => 0400,
     content => "2.6.1",
     replace => "false",
-    require => Package[$pe_agent_pkgs],
+    require => Package["pe-puppet-enterprise-release"],
   }
 
 
   file { '/usr/local/bin/facter':
     ensure  => 'link',
     target  => '/opt/puppet/bin/facter',
-    require => Package[$pe_agent_pkgs],
+    require => Package["pe-puppet-enterprise-release"],
   }
 
   file { '/usr/local/bin/puppet':
     ensure  => 'link',
     target  => '/opt/puppet/bin/puppet',
-    require => Package[$pe_agent_pkgs],
+    require => Package["pe-puppet-enterprise-release"],
   }
 
   file { '/usr/local/bin/hiera':
     ensure  => 'link',
-    target  => '/opt/puppet/bin/facter',
-    require => Package[$pe_agent_pkgs],
+    target  => '/opt/puppet/bin/hiera',
+    require => Package["pe-puppet-enterprise-release"],
   }
 
 }

@@ -1,8 +1,6 @@
 #!/bin/bash
-
-
-#PUPPET_var_path=`/opt/puppet/bin/puppet config print vardir`
-PUPPET_var_path="/"
+PUPPET_var_path=`/opt/puppet/bin/puppet config print vardir`
+#PUPPET_var_path="/"
 PUPPET_lock_file="${PUPPET_var_path}/state/puppetdlock"
 PUPPET_bootstrap="false"
 PUPPET_install="false"
@@ -29,17 +27,20 @@ puppet_bootstrap(){
   done
 
   echo "Now running puppet"
-
-  if [ $PUPPET_install=='true' ]
+  echo $PUPPET_install
+  echo $PUPPET_install
+  if [ "${PUPPET_install}" == 'true' ]
   then
-    FACTER_pe_install="true"
-    echo /opt/puppet/bin/puppet agent -t --environment=pe_agent \
+    export FACTER_pe_install="true"
+    echo "starting puppet install" 
+    /opt/puppet/bin/puppet agent -t --debug --environment=pe_bootstrap \
       --server="${PUPPET_master}" \
       --ssldir="/etc/puppetlabs/puppet/ssl"
-  elif [ $PUPPET_upgrade=='true' ]
+  elif [ "${PUPPET_upgrade}" == 'true' ]
   then
-    FACTER_pe_upgrade="true"
-    echo /opt/puppet/bin/puppet agent -t --environment=pe_agent
+    export FACTER_pe_upgrade="true"
+    echo "starting puppet upgrade"
+    /opt/puppet/bin/puppet agent -t --debug --environment=pe_bootstrap
   fi
 
 }
@@ -69,23 +70,13 @@ do
   esac
 done
 
-if [ $PUPPET_bootstrap=='false' ]
+if [ "${PUPPET_bootstrap}" == 'false' ]
 then
-  echo /opt/puppet/bin/PUPPET_bootstrap.sh --install=$PUPPET_install \
+  /opt/puppet/bin/PUPPET_bootstrap --install=$PUPPET_install \
     --upgrade=$PUPPET_upgrade \
     --master=$PUPPET_master \
     --bootstrap=true &
 else
   puppet_bootstrap
 fi
-
-
-
-
-
-
-
-
-
-
 
