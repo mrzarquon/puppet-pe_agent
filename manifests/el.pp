@@ -25,7 +25,5 @@ class pe_agent::el {
   }
 
   # if install, include the config.pp option to set the puppet.conf and other things
-  if $pe_isntall == 'true' {
-    include pe_agent::config
-  }
+  include pe_agent::config
 }

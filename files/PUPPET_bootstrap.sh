@@ -33,14 +33,14 @@ puppet_bootstrap(){
   then
     export FACTER_pe_install="true"
     echo "starting puppet install" 
-    /opt/puppet/bin/puppet agent -t --debug --environment=pe_bootstrap \
+    /opt/puppet/bin/puppet agent -t --environment=pe_bootstrap \
       --server="${PUPPET_master}" \
       --ssldir="/etc/puppetlabs/puppet/ssl"
   elif [ "${PUPPET_upgrade}" == 'true' ]
   then
     export FACTER_pe_upgrade="true"
     echo "starting puppet upgrade"
-    /opt/puppet/bin/puppet agent -t --debug --environment=pe_bootstrap
+    /opt/puppet/bin/puppet agent -t --environment=pe_bootstrap
   fi
 
 }
@@ -49,33 +49,62 @@ puppet_bootstrap(){
 
 #check if we are the forked process or the puppet triggered one
 
-for options in $*
-do
-  case $options in
-    --install=*)
-      PUPPET_install=${*=}
+# for options in $*
+#do
+#  case $options in
+#    --install=*)
+#      PUPPET_install=${*=}
+#      ;;
+#    --upgrade=*)
+#      PUPPET_upgrade=${*=}
+#      ;;
+#    --master=*)
+#      PUPPET_master=${*=}
+#      ;;
+#    --bootstrap=*)
+#      PUPPET_bootstrap=${*=}
+#      ;;
+#    *)
+#      #unknown
+#      ;;
+#  esac
+#done
+
+#arg string
+arg_string=""
+
+while getopts ":uib:m:" opt; do
+  case $opt in
+    u)
+      echo "upgrade"
+      arg_string=$arg_string"-u "
+      PUPPET_upgrade="true"
       ;;
-    --upgrade=*)
-      PUPPET_upgrade=${*=}
+    i)
+      echo "install"
+      arg_string=$arg_string"-i "
+      PUPPET_install="true"
       ;;
-    --master=*)
-      PUPPET_master=${*=}
+    b)
+      echo "bootstrap"
+      arg_string=$arg_string"-b "
+      PUPPET_bootstrap="true"
       ;;
-    --bootstrap=*)
-      PUPPET_bootstrap=${*=}
+    m)
+      echo "master"
+      arg_string=$arg_string"-m ${OPTARG} "
+      PUPPET_master=$OPTARG
       ;;
-    *)
-      #unknown
+    :)
+      echo "Needs arguments"
       ;;
   esac
 done
 
+
 if [ "${PUPPET_bootstrap}" == 'false' ]
 then
-  /opt/puppet/bin/PUPPET_bootstrap --install=$PUPPET_install \
-    --upgrade=$PUPPET_upgrade \
-    --master=$PUPPET_master \
-    --bootstrap=true &
+  /opt/puppet/bin/PUPPET_bootstrap -b $arg_string &
 else
   puppet_bootstrap
 fi

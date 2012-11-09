@@ -26,16 +26,18 @@ fact_is_puppetconsole=false",
 
   service { 'pe-puppet':
     ensure  => running,
-    require => File['/etc/puppetlabs/puppet/puppet.conf'],
+    require => Package["pe-puppet"],
   }
-  
-  file {'/etc/puppetlabs/puppet/puppet.conf':
-    ensure  => file,
-    owner   => 'pe-puppet',
-    group   => 'pe-puppet',
-    mode    => 0600,
-    content => template("pe_puppetenterprise/puppet.conf.erb"),
-    require => File['/opt/puppet/pe_version'],
+
+  if $pe_install == "true" { 
+    file {'/etc/puppetlabs/puppet/puppet.conf':
+      ensure  => file,
+      owner   => 'pe-puppet',
+      group   => 'pe-puppet',
+      mode    => 0600,
+      content => template("pe_agent/puppet.conf.erb"),
+      require => File['/opt/puppet/pe_version'],
+    }
   }
 
   file { '/opt/puppet/pe_version':
@@ -44,7 +46,6 @@ fact_is_puppetconsole=false",
     group   => root,
     mode    => 0400,
     content => "2.6.1",
-    replace => "false",
     require => Package["pe-puppet-enterprise-release"],
   }
 
