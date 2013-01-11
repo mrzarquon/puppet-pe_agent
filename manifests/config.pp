@@ -1,4 +1,8 @@
 class pe_agent::config {
+  include pe_agent::params
+
+  $pe_install_version = $pe_agent::params::pe_install_version
+  $pe_servername = $pe_agent::params::pe_servername
 
   file { '/etc/puppetlabs/facter':
     ensure => directory,
@@ -18,7 +22,7 @@ class pe_agent::config {
     ensure  => file,
     content => "fact_is_puppetagent=true
 fact_stomp_port=61613
-fact_stomp_server=master
+fact_stomp_server=${pe_servername}
 fact_is_puppetmaster=false
 fact_is_puppetca=false
 fact_is_puppetconsole=false",
@@ -45,7 +49,7 @@ fact_is_puppetconsole=false",
     owner   => root,
     group   => root,
     mode    => 0400,
-    content => "2.6.1",
+    content => "${pe_install_version}",
     require => Package["pe-puppet-enterprise-release"],
   }
 

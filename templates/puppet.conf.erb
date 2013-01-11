@@ -3,7 +3,7 @@
   @master_install   = ENV["q_puppetmaster_install"] == 'y' ? true : false
   @agent_install    = ENV["q_puppetagent_install"] == 'y' ? true : false
   @console_install  = ENV["q_puppet_enterpriseconsole_install"] == 'y' ? true : false
-  @agent_server     = "master"
+  @agent_server     = @pe_servername
   @agent_certname   = @hostname
   @master_certname  = ENV["q_puppetmaster_certname"]
   @dns_alt_names    = ENV["q_puppetmaster_dnsaltnames"]
