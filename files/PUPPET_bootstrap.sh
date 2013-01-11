@@ -32,8 +32,6 @@ puppet_bootstrap(){
   done
 
   echo "Now running puppet"
-  echo $PUPPET_install
-  echo $PUPPET_install
   if [ "${PUPPET_install}" == 'true' ]
   then
     export FACTER_pe_install="true"
