@@ -12,9 +12,9 @@ A future class enabled.pp will create the environment on your master if you appl
 The idea around the package layout is to make them auto-buildable as possible, so the idea would be:
 
     %releasenumber%
-    |-- %OSfamily%
-        |-- Packages
-            |-- %OSFamily%_%OSrevision%_%Architecture%.pp
+    |-- %OSfamily%.pp
+    |-- Packages
+        |-- %OSFamily%_%OSrevision%_%Architecture%.pp
 
 In theory, this means that new realeases of PE just need to be added to the existing manifests directory in the form of a single folder named after the release number.
 
