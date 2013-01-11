@@ -5,7 +5,7 @@ class pe_agent::enabled {
     path    => '/etc/puppetlabs/puppet/puppet.conf',
     section => 'pe_bootstrap',
     setting => 'modulepath',
-    value   => '\$confdir/environments/pe_bootstrap/modules',
+    value   => '/opt/puppet/share/puppet/environments/pe_bootstrap/modules',
     ensure  => present,
   }
 
@@ -13,9 +13,34 @@ class pe_agent::enabled {
     path    => '/etc/puppetlabs/puppet/puppet.conf',
     section => 'pe_bootstrap',
     setting => 'manifest',
-    value   => '\$confdir/environments/pe_bootstrap/manifests/site.pp',
+    value   => '/opt/puppet/share/puppet/environments/pe_bootstrap/manifests/site.pp',
     ensure  => present,
   }
-  
 
+  file { '/opt/puppet/share/puppet/environments':
+    ensure => directory,
+    mode   => 0644,
+    owner  => root,
+    group  => root,
+  }
+
+  file { '/opt/puppet/share/puppet/environments/modules/':
+    ensure => link,
+    target => '/opt/puppet/share/puppet/modules',
+  }
+
+  file { '/opt/puppet/share/puppet/environments/manifests':
+    ensure => directory,
+    mode   => 0644,
+    owner  => root,
+    group  => root,
+  }
+
+  file { '/opt/puppet/share/puppet/environments/manifests/site.pp':
+    ensure => file,
+    mode   => 0644,
+    owner  => root,
+    group  => root,
+    source => "puppet:///pe_agent/site.pp",
+  }
 }
