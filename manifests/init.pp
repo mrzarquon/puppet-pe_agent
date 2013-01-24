@@ -1,7 +1,8 @@
 class pe_agent{
   include pe_agent::params
 
-  $pe_install_version = $pe_agent::params::pe_install_version
+  # switch . to _, so we can still have version numbers in console
+  $pe_install_version = regsubst($pe_agent::params::pe_install_version, '\.+$', '_')
   $pe_servername = $pe_agent::params::pe_servername
 
   #if agent checks in and already is up to date, don't do anything
