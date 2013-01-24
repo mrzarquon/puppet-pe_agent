@@ -32,7 +32,7 @@ In theory, this means that new realeases of PE just need to be added to the exis
     │   └── puppet
     │       └── module_cwd.rb
     ├── manifests
-    │   ├── 2.6.1
+    │   ├── 2_6_1
     │   │   ├── el.pp
     │   │   └── packages
     │   │       ├── el_5_x86_64.pp
