@@ -3,7 +3,7 @@ class pe_agent{
 
   # switch . to _, so we can still have version numbers in console
   #$pe_install_version = regsubst($pe_agent::params::pe_install_version, '\.+$', '_')
-  $pe_install_version = "2_7_0"
+  $pe_install_version = "2.7.0"
   $pe_servername = $pe_agent::params::pe_servername
 
   #if agent checks in and already is up to date, don't do anything
@@ -31,7 +31,7 @@ class pe_agent{
   #this is the actual installation actions
   if $pe_install == 'true' or $pe_upgrade == 'true' {
     case $operatingsystem {
-      'CentOS': { include pe_agent::$pe_install_version::el }
+      'CentOS', 'RedHat': { include "pe_agent::el" }
       default:  { fail("unsupported platform") } 
     }
   }
