@@ -1,5 +1,4 @@
 class pe_agent::enabled {
-  include inifile
   # this still isn't working / testing code.
   # The purpose of this class is to allow you to create the pe_bootstrap environment on a 
   # master in your environment (probably the same one acting as the CA), that will then 
