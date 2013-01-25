@@ -2,7 +2,8 @@ class pe_agent{
   include pe_agent::params
 
   # switch . to _, so we can still have version numbers in console
-  $pe_install_version = regsubst($pe_agent::params::pe_install_version, '\.+$', '_')
+  #$pe_install_version = regsubst($pe_agent::params::pe_install_version, '\.+$', '_')
+  $pe_install_version = "2_7_0"
   $pe_servername = $pe_agent::params::pe_servername
 
   #if agent checks in and already is up to date, don't do anything
@@ -30,12 +31,8 @@ class pe_agent{
   #this is the actual installation actions
   if $pe_install == 'true' or $pe_upgrade == 'true' {
     case $operatingsystem {
-      #by calling the include this way, each version of PE just needs to drop a corresponding folder of manifests for distribution into /opt/puppet/share/puppet/modules/pe_agent
-      centos, redhat: { include pe_agent::$pe_install_version::el }
-      default: { fail("unsupported platform") } 
+      'CentOS': { include pe_agent::$pe_install_version::el }
+      default:  { fail("unsupported platform") } 
     }
   }
-
-
-
 }
